@@ -171,21 +171,21 @@ public class TreatData {
 	 * @param treatedData Les données à traiter
 	 * @throws IOException
 	 */
-	public void manualClean(int parameter, TreatedData treatedData) throws IOException{
+	public void manualClean(int parameter, TreatedData treatedData, String path) throws IOException{
 		String curName = "";
-		BufferedWriter bw = new BufferedWriter(new FileWriter("manualClean.csv"));
+		BufferedWriter bw = new BufferedWriter(new FileWriter(path));
 		int cpt = 0;
 		for (String name : treatedData.getTreatedData().keySet()) {
 			if(name.length()>parameter){
 				if(curName.equals("") || !name.substring(0, parameter).equals(curName.substring(0, parameter))){
 					if(cpt>1){
-						bw.write((curName+";;\n\n"));
+						bw.write((curName+";\n\n"));
 					}
 					cpt = 1;
 					curName = name;
 
 				}else{
-					bw.write(name + ";;\n");
+					bw.write(name + ";\n");
 					cpt ++;
 				}
 			}

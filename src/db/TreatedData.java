@@ -1,5 +1,14 @@
 package db;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -32,7 +41,7 @@ public class TreatedData {
 		this.treatedData = new TreeMap<>();;
 		this.toChange = new TreeMap<>();
 	}
-	
+
 	/**
 	 * Recupère les données et leur nombre d'apparition
 	 * @return Les données et leur nombre d'apparition
@@ -40,15 +49,15 @@ public class TreatedData {
 	public Map<String, Integer> getTreatedData() {
 		return treatedData;
 	}
-	
+
 	/**
 	 * Charge les données et leur nombre d'apparition
 	 * @param treatedData Les données et leur nombre d'apparition
 	 */
-	public void setTreatedData(TreeMap<String, Integer> treatedData) {
+	public void setTreatedData(Map<String, Integer> treatedData) {
 		this.treatedData = treatedData;
 	}
-	
+
 	/**
 	 * Récupère les changements à réaliser
 	 * @return Les changement
@@ -56,7 +65,7 @@ public class TreatedData {
 	public Map<String, String> getToChange() {
 		return toChange;
 	}
-	
+
 	/** 
 	 * Charge les changements réalisés
 	 * @param toChange Les changements réalisés
@@ -64,7 +73,50 @@ public class TreatedData {
 	public void setToChange(TreeMap<String, String> toChange) {
 		this.toChange = toChange;
 	}
-	
+
+	/**
+	 * Ajoute les changements contenus dans un fichier csv
+	 * @param path Le chemin du fichier csv à charger
+	 * @throws IOException
+	 */
+	public void loadToChange(String path) throws IOException{
+		BufferedReader br = new BufferedReader(new FileReader(path));
+		String tmp;
+		String [] splitedLine;
+		while ((tmp=br.readLine())!=null ) {
+			if(tmp.contains(";") && tmp.charAt(0) != ';'){
+				splitedLine = tmp.split(";");
+				if(splitedLine.length == 2){
+					if(splitedLine[0].contains(">")){
+						String[] splitedWrong = splitedLine[0].split(">");
+						for (int i = 0; i < splitedWrong.length; i++) {
+							toChange.put(splitedWrong[i], splitedLine[1]);
+						}
+					}else{
+						toChange.put(splitedLine[0], splitedLine[1]);
+					}
+				}
+			}
+		}
+		this.uniformToChange();
+	}
+
+	public void saveToChange(String path) throws FileNotFoundException{
+		Map <String, List<String>> toChangeByRight = this.getFinalTab();
+		File csvFile = new File(path);
+		PrintStream printstream = new PrintStream(new FileOutputStream(csvFile)); 
+
+		for (String right : toChangeByRight.keySet()) {
+			String buffer = "";
+			for (String wrongs : toChangeByRight.get(right)) {
+				buffer += wrongs + ">";
+			}
+			buffer = buffer.substring(0,buffer.length() - 1);
+			buffer += ";"+right +"\n";
+			printstream.print(buffer);
+		}
+	}
+
 	/**
 	 * Uniformise les changements
 	 * Par exemple si on a S1->S2 et S2->S3 on fait S1->S3
@@ -77,7 +129,7 @@ public class TreatedData {
 			}
 		}
 	}
-	
+
 	/**
 	 * Recupère une map associant une donnée traitée à toutes les données non traitées qui seront remplacées
 	 * @return Une map associant une donnée traitée à toutes les données non traitées qui seront remplacées
@@ -95,7 +147,7 @@ public class TreatedData {
 		}
 		return displayedData;
 	}
-	
+
 	/**
 	 * Récupère une map associant une donnée à son nombre d'apparition ordonnée par ordre d'apparition
 	 * @return Une map associant une donnée à son nombre d'apparition ordonnée par ordre d'apparition
