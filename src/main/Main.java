@@ -240,24 +240,27 @@ public class Main {
 							System.out.print("\nEntrez le nom d'un auteur : ");
 							param = sc.nextLine();
 							answer = requete.getReferences(param);
+							System.out.println("\nAuteurs :");
 							for (String string : answer) {
-								System.out.println(string);
+								System.out.println("\t"+string);
 							}
 							break;
 						case 3:
 							System.out.print("\nEntrez le nom d'un auteur : ");
 							param = sc.nextLine();
 							answer = requete.getJournalsReferences(param);
+							System.out.println("\nJournaux cite :");
 							for (String string : answer) {
-								System.out.println(string);
+								System.out.println("\t"+string);
 							}
 							break;
 						case 4:
 							System.out.print("\nEntrez le nom d'un auteur : ");
 							param = sc.nextLine();
 							answer = requete.getPeopleCiting(param);
+							System.out.println("\nCite par :");
 							for (String string : answer) {
-								System.out.println(string);
+								System.out.println("\t"+string);
 							}
 							break;
 						case 5:

@@ -48,7 +48,7 @@ public class Request {
 			while (!find && j<authorNames.length){
 				if(authorNames[j].equals(author)){
 					String[] credits = db.getData()[i][4].split(">");
-					for(int k = 0; k<credits.length;j++){
+					for(int k = 0; k<credits.length;k++){
 						if(!references.contains(credits[k].substring(0, credits[k].indexOf(",")))){
 							references.add(credits[k].substring(0, credits[k].indexOf(",")));
 						}
@@ -75,7 +75,7 @@ public class Request {
 			while (!find && j<authorNames.length){
 				if(authorNames[j].equals(author)){
 					String[] credits = db.getData()[i][4].split(">");
-					for(int k = 0; k<credits.length;j++){
+					for(int k = 0; k<credits.length;k++){
 						String[] citation = credits[k].split(",");
 						if(!journals.contains(citation[2])){
 							journals.add(citation[2]);
@@ -103,7 +103,7 @@ public class Request {
 			while (!find && j<credits.length){
 				if(credits[j].split(",")[0].equals(author)){
 					String[] authors = db.getData()[i][0].split(">");
-					for(int k = 0; k<authors.length;j++){
+					for(int k = 0; k<authors.length;k++){
 						if(!peopleCiting.contains(authors[k])){
 							peopleCiting.add(authors[k]);
 						}
